@@ -11,6 +11,8 @@
   "include": [
     "**/*.ts",
     "**/*.tsx",
+    "**/*.svg",
+    // "**/*.png",
     ".expo/types/**/*.ts",
     "expo-env.d.ts"
   ]

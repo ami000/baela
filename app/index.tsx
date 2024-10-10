@@ -1,11 +1,19 @@
 import { Redirect } from 'expo-router';
-import { useAuth } from '../context/auth';
+import store from '@/src/redux/store';
+import { useColorScheme } from 'react-native'
+import { useEffect } from 'react';
+import { settings } from '@/src/redux/Reducer/settingsReducer';
 
 export default function Index() {
-  const { isAuthenticated } = useAuth();
+  const storeData = store.getState();
+  const theme = useColorScheme()
 
-  if (isAuthenticated) {
-    return <Redirect href="/(app)/dashboard" />;
+  useEffect(() => {
+    store.dispatch(settings({ darkMode: theme === "dark" }))
+  }, [theme])
+
+  if (storeData.userDetails?.isAuthenticated) {
+    return <Redirect href="/dashboard" />;
   }
-  return <Redirect href="/(auth)/login" />;
+  return <Redirect href="/login" />;
 }
