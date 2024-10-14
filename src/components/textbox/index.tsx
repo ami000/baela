@@ -1,3 +1,4 @@
+import { useTheme } from "@/src/constants/themeContext";
 import React, { forwardRef, ReactElement } from "react";
 import { View, Text, StyleSheet, TextInput, TextInputProps, TouchableOpacity } from "react-native";
 import { IconButton } from 'react-native-paper';
@@ -23,6 +24,51 @@ const TextBox = forwardRef<TextInput, TextBoxProps>(({
     style,
     ...props
 }, ref) => {
+    const { theme } = useTheme();
+
+    const styles = StyleSheet.create({
+        container: {
+            marginBottom: 16,
+        },
+        label: {
+            fontSize: 14,
+            fontWeight: '500',
+            color: '#6c757d',
+            marginBottom: 8,
+        },
+        inputContainer: {
+            flexDirection: 'row',
+            alignItems: 'center',
+            borderWidth: 1,
+            borderColor: '#e0e0e0',
+            borderRadius: 10,
+            paddingHorizontal: 8,
+        },
+        input: {
+            flex: 1,
+            paddingVertical: 10,
+            paddingHorizontal: 8,
+            color: theme.textColor1,
+            fontSize: 16,
+        },
+        errorInput: {
+            borderColor: '#d32f2f',
+        },
+        icon: {
+            marginHorizontal: 4,
+        },
+        errorMessage: {
+            color: '#d32f2f',
+            fontSize: 12,
+            marginTop: 4,
+        },
+        hint: {
+            color: '#6c757d',
+            fontSize: 12,
+            marginTop: 4,
+        },
+    });
+
     return (
         <View style={[styles.container, style]}>
             {preLabel && <Text style={styles.label}>{preLabel}</Text>}
@@ -37,7 +83,7 @@ const TextBox = forwardRef<TextInput, TextBoxProps>(({
                 <TextInput
                     ref={ref}
                     style={[styles.input, ...(errorMessage ? [styles.errorInput] : [])]}
-                    placeholderTextColor="#6c757d"
+                    placeholderTextColor={theme.placeholder}
                     {...props}
                 />
 

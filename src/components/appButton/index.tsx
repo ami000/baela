@@ -45,10 +45,11 @@ interface IProps {
     label: string;
     loading?: boolean;
     onPress: () => void; // onPress prop for the button action
+    style?: any;
 }
 
-const AppButton: React.FC<IProps> = ({ className, label, customVariant, loading, onPress }) => {
-    const buttonStyles = [styles.commonButton];
+const AppButton: React.FC<IProps> = ({ className, label, customVariant, loading, onPress, style }) => {
+    const buttonStyles = [styles.commonButton, ...(style ? [style] : [])];
 
     // Determine the style based on the custom variant
     switch (customVariant) {
