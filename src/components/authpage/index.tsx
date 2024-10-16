@@ -90,7 +90,6 @@ const LoginForm: React.FC<LoginFormProps> = ({ page }) => {
 
         try {
             const response = await axios(options);
-            console.log("response")
             Toast.show({
                 type: 'success',
                 text1: 'Successfully logged in',
@@ -101,7 +100,11 @@ const LoginForm: React.FC<LoginFormProps> = ({ page }) => {
                     source: fromSignup ? 'signup' : 'login',
                 })
             );
-            router.replace("/(app)/dashboard")
+            if (fromSignup) {
+                router.replace("/(onboarding)")
+            } else {
+                router.replace("/(app)/dashboard")
+            }
         } catch (error: any) {
             Toast.show({
                 type: 'error',
@@ -153,7 +156,6 @@ const LoginForm: React.FC<LoginFormProps> = ({ page }) => {
 
     const handleForgotPassword = async (data: any) => {
         setLoading(true);
-        console.log(data);
         await new Promise(res => setTimeout(res, 1000));
         Toast.show({
             type: 'success',
@@ -164,7 +166,6 @@ const LoginForm: React.FC<LoginFormProps> = ({ page }) => {
     };
 
     const onSubmit = (data: any) => {
-        console.log(route.name)
         if (route.name === 'signup') {
             handleSignup(data);
         } else if (route.name === 'signin') {

@@ -1,6 +1,6 @@
 
 import React from 'react';
-import { Platform, SafeAreaView, StatusBar, StyleSheet, useColorScheme, View } from 'react-native';
+import { Platform, SafeAreaView, StatusBar, StyleSheet, useColorScheme, View, Text } from 'react-native';
 import { Stack } from 'expo-router';
 import { Provider, useSelector } from 'react-redux';
 import store from '@/src/redux/store';
@@ -8,10 +8,17 @@ import { settings } from '@/src/redux/Reducer/settingsReducer';
 import { RootState } from '@/src/redux/Reducer';
 import { ThemeProvider } from '@/src/constants/themeContext';
 import Constants from 'expo-constants';
+import { customFonts } from '@/src/constants/cutsomFonts';
+import { useFonts as useRoboto, Roboto_400Regular } from '@expo-google-fonts/roboto';
+import { useFonts as useOxygen, Oxygen_400Regular } from '@expo-google-fonts/oxygen';
+import { useFonts as useUbuntu, Ubuntu_400Regular } from '@expo-google-fonts/ubuntu';
 
 function RootLayoutNav() {
   const isAuthenticated = useSelector((state: RootState) => state.userDetails.isAuthenticated);
   const colorScheme = useColorScheme();
+  useRoboto({ Roboto: Roboto_400Regular });
+  useOxygen({ Oxygen: Oxygen_400Regular });
+  useUbuntu({ Ubuntu: Ubuntu_400Regular });
 
   React.useEffect(() => {
     store.dispatch(settings({ darkMode: colorScheme === "dark" }));
@@ -40,6 +47,7 @@ export default function RootLayout() {
     container: {
       flex: 1,
       backgroundColor: isDarkMode ? '#2a2a2a' : '#ffffff',
+      ...customFonts
     },
     content: {
       flex: 1,

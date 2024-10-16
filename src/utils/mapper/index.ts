@@ -56,7 +56,6 @@ export const errorMapper = (jsonData: any, templateId: TemplateId) => {
             jsonData.forEach((e: any) => {
                 if (!e?.category && !issue.includes(e?.["Forum name"])) issue.push(e?.["Forum name"])
             });
-            console.log(issue)
             mappedJson = jsonData.map((row: any) => {
                 let mappedRow: any = {};
                 Object.keys(GMATClubTemplate).forEach((field: string) => {
@@ -73,12 +72,10 @@ export const errorMapper = (jsonData: any, templateId: TemplateId) => {
         }
         case TemplateId.EGMAT: {
             const data = e_gmatMapper(jsonData, templateId)
-            console.log("data", data)
             return data;
         }
         case TemplateId.TESTPREP: {
             const data = targetTestPrepMapper(jsonData, templateId)
-            console.log("data", data)
             return data;
         }
         case TemplateId.GMATWHIZ: {

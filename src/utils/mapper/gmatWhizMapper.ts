@@ -23,7 +23,6 @@ const parseQuestions = (text: string, template: string) => {
             Solution: !iscorrect ? "Incorrect" : "Correct"
         };
     });
-    console.log("data", parsedData)
     return parsedData
 }
 

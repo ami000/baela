@@ -128,12 +128,13 @@ const SignupForm: React.FC<SignUpFormProps> = ({ handleGoogleLogin, loading, onS
                     rules={{
                         required: "Name is required for signup",
                     }}
-                    render={({ field: { value, ...rest }, fieldState: { error } }) => (
+                    render={({ field: { value, onChange, ...rest }, fieldState: { error } }) => (
                         <TextBox
                             preLabel="Name"
                             placeholder="Enter your name"
                             errorMessage={error?.message}
                             value={value}
+                            onChangeText={onChange}
                             {...rest}
                         />
                     )}
@@ -147,12 +148,13 @@ const SignupForm: React.FC<SignUpFormProps> = ({ handleGoogleLogin, loading, onS
                             message: "Enter a valid email",
                         },
                     }}
-                    render={({ field: { value, ...rest }, fieldState: { error } }) => (
+                    render={({ field: { value, onChange, ...rest }, fieldState: { error } }) => (
                         <TextBox
                             preLabel="Email"
                             placeholder="Enter your email"
                             errorMessage={error?.message}
                             value={value}
+                            onChangeText={onChange}
                             {...rest}
                         />
                     )}
@@ -166,13 +168,14 @@ const SignupForm: React.FC<SignUpFormProps> = ({ handleGoogleLogin, loading, onS
                             message: "Password is invalid",
                         },
                     }}
-                    render={({ field: { value, ...rest }, fieldState: { error } }) => (
+                    render={({ field: { value, onChange, ...rest }, fieldState: { error } }) => (
                         <TextBox
                             preLabel="Password"
                             placeholder="Create a password"
                             hint="Must be at least 8 characters."
                             errorMessage={error?.message}
                             secureTextEntry={!visibility.pass}
+                            onChangeText={onChange}
                             icon={{
                                 position: "end",
                                 icon: visibility.pass ? (

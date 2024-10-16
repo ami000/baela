@@ -7,16 +7,19 @@ import { updateUserData } from "@/src/redux/Reducer/userReducer";
 import GreetText from "../greetText";
 import AppButton from "../appButton";
 import AppDatePicker from "../appDatePicker";
+import { useTheme } from "@/src/constants/themeContext";
 
 interface IProps {
     backClick: () => void;
+    submitClick: () => void;
 }
 
-const Stepper1: React.FC<IProps> = ({ backClick }) => {
+const Stepper1: React.FC<IProps> = ({ backClick, submitClick }) => {
     const dispatch = useDispatch();
     const userDetail = useSelector((state: any) => state?.userDetails?.userDetails);
     const { setValue, getValues } = useFormContext();
-    const { userName } = userDetail;
+    const { userName, nickName } = userDetail;
+    const { theme } = useTheme();
 
     const handleSubmit = () => {
         dispatch(
@@ -24,12 +27,54 @@ const Stepper1: React.FC<IProps> = ({ backClick }) => {
                 examDate: getValues("examDate"),
             })
         );
+        submitClick();
     };
+
+    const styles = StyleSheet.create({
+        contentContainer: {
+            height: "70%",
+            justifyContent: "space-between",
+            padding: 20,
+        },
+        topArea: {
+            gap: 10,
+        },
+        questionContainer: {
+            marginBottom: 10,
+        },
+        question: {
+            fontWeight: "600",
+            fontSize: 22,
+            color: theme.textColor1,
+        },
+        hint: {
+            marginTop: 10,
+            color: theme.gray300,
+            fontWeight: "400",
+            fontSize: 16,
+        },
+        onboardingDate: {
+            maxWidth: 295,
+        },
+        bottomButtons: {
+            flexDirection: "row",
+            justifyContent: "flex-end",
+        },
+        backButton: {
+            marginRight: 10,
+            backgroundColor: "#ddd",
+        },
+        continueButton: {
+            // backgroundColor: "#007AFF",
+            width: "auto",
+            padding: 20
+        },
+    });
 
     return (
         <View style={styles.contentContainer}>
             <View style={styles.topArea}>
-                <GreetText>{`Hello ${userName}!`}</GreetText>
+                <GreetText>{`Hello ${userName || nickName}!`}</GreetText>
                 <View style={styles.questionContainer}>
                     <Text style={styles.question}>When is your G-MAT Exam date?</Text>
                     <Text style={styles.hint}>
@@ -82,42 +127,5 @@ const Stepper1: React.FC<IProps> = ({ backClick }) => {
         </View>
     );
 };
-
-const styles = StyleSheet.create({
-    contentContainer: {
-        height: "70%",
-        justifyContent: "space-between",
-        padding: 20,
-    },
-    topArea: {
-        gap: 10,
-    },
-    questionContainer: {
-        marginBottom: 10,
-    },
-    question: {
-        fontWeight: "600",
-        fontSize: 22,
-    },
-    hint: {
-        color: "#888",
-        fontWeight: "400",
-        fontSize: 16,
-    },
-    onboardingDate: {
-        maxWidth: 295,
-    },
-    bottomButtons: {
-        flexDirection: "row",
-        justifyContent: "flex-end",
-    },
-    backButton: {
-        marginRight: 10,
-        backgroundColor: "#ddd",
-    },
-    continueButton: {
-        backgroundColor: "#007AFF",
-    },
-});
 
 export default Stepper1;

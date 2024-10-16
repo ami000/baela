@@ -5,15 +5,16 @@ import { SequentialTypeWriter } from '../typewriter';
 import { updateUserData } from '@/src/redux/Reducer/userReducer';
 import AppButton from '../appButton';
 import AppAvatar from '../appAvatar';
+import { useTheme } from '@/src/constants/themeContext';
 
 interface IProps {
     onNext: () => void;
 }
 
 const Welcome: React.FC<IProps> = ({ onNext }) => {
-    console.log("rendering")
     const userDetail = useSelector((state: any) => state?.userDetails?.userDetails);
     const [nameValue, setNameValue] = useState<string>(userDetail?.nickName || '');
+    const { theme } = useTheme();
     const [gotName, setGotName] = useState<boolean>(false);
     const inputRef = useRef<TextInput>(null);
     const dispatch = useDispatch();
@@ -39,6 +40,60 @@ const Welcome: React.FC<IProps> = ({ onNext }) => {
     const [index, setIndex] = useState(0);
 
     const Typewriter = SequentialTypeWriter({ index, setIndex });
+
+
+    const styles = StyleSheet.create({
+        welcomeContainer: {
+            display: "flex",
+            gap: 10
+        },
+        questionContainer: {
+            marginBottom: 10,
+        },
+        question: {
+            fontWeight: '600',
+            fontSize: 22,
+            color: theme.textColor1
+        },
+        hint: {
+            color: theme.gray500, // Equivalent to var(--gray-500)
+            fontWeight: '400',
+            fontSize: 16,
+            marginTop: 10
+        },
+        nameContainer: {
+            flexDirection: 'row',
+            alignItems: 'center',
+            gap: 10,
+            padding: 10,
+            backgroundColor: theme.backgroundColor3, // Equivalent to var(--background-color-3)
+            borderRadius: 10,
+        },
+        inputContainer: {
+            flex: 1,
+            flexDirection: 'column',
+            gap: 5,
+        },
+        greet: {
+            color: theme.gray500, // Equivalent to var(--gray-500)
+            fontWeight: '400',
+            fontSize: 14,
+            marginLeft: 5,
+        },
+        inputName: {
+            fontSize: 16,
+            fontWeight: '500',
+            color: theme.textColor1, // Equivalent to var(--text-color-1)
+            borderWidth: 0,
+            minHeight: 30,
+            width: '100%',
+            padding: 5,
+        },
+        welcomeBtn: {
+            alignSelf: 'flex-start',
+            fontWeight: 500
+        },
+    });
 
     return (
         <View style={styles.welcomeContainer}>
@@ -96,56 +151,5 @@ const Welcome: React.FC<IProps> = ({ onNext }) => {
         </View>
     );
 };
-
-const styles = StyleSheet.create({
-    welcomeContainer: {
-        // flex: 1,
-        // flexDirection: 'column',
-        // gap: 10,
-    },
-    questionContainer: {
-        marginBottom: 10,
-    },
-    question: {
-        fontWeight: '600',
-        fontSize: 22,
-    },
-    hint: {
-        color: '#6B7280', // Equivalent to var(--gray-500)
-        fontWeight: '400',
-        fontSize: 16,
-    },
-    nameContainer: {
-        flexDirection: 'row',
-        alignItems: 'center',
-        gap: 10,
-        padding: 10,
-        backgroundColor: '#F3F4F6', // Equivalent to var(--background-color-3)
-        borderRadius: 10,
-    },
-    inputContainer: {
-        flex: 1,
-        flexDirection: 'column',
-        gap: 5,
-    },
-    greet: {
-        color: '#6B7280', // Equivalent to var(--gray-500)
-        fontWeight: '400',
-        fontSize: 14,
-        marginLeft: 5,
-    },
-    inputName: {
-        fontSize: 16,
-        fontWeight: '500',
-        color: '#1F2937', // Equivalent to var(--text-color-1)
-        borderWidth: 0,
-        minHeight: 30,
-        width: '100%',
-        padding: 5,
-    },
-    welcomeBtn: {
-        alignSelf: 'flex-start',
-    },
-});
 
 export default Welcome;

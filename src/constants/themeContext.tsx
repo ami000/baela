@@ -44,6 +44,7 @@ interface ThemeColors {
   menuItemColor: string;
   questionBg: string;
   scrollbar: string;
+  commonBorder: string;
 }
 
 const lightTheme: ThemeColors = {
@@ -88,6 +89,7 @@ const lightTheme: ThemeColors = {
   menuItemColor: '#A3A3A3',
   questionBg: '#F9FAFB',
   scrollbar: '#D9D9D9',
+  commonBorder: "#D0D5DD",
 };
 
 const darkTheme: ThemeColors = {
@@ -132,6 +134,7 @@ const darkTheme: ThemeColors = {
   menuItemColor: '#A3A3A3',
   questionBg: '#383838',
   scrollbar: '#383838',
+  commonBorder: "#D0D5DD"
 };
 
 interface ThemeContextType {

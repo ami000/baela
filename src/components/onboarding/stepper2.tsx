@@ -5,16 +5,21 @@ import { useDispatch, useSelector } from "react-redux";
 import { updateUserData } from "@/src/redux/Reducer/userReducer";
 import GreetText from "../greetText";
 import AppButton from "../appButton";
+import { useTheme } from "@/src/constants/themeContext";
+import RatingComponent from "../ratingComponent";
+import { Typewriter } from "../typewriter";
 
 interface IProps {
     backClick: () => void;
+    submitClick: () => void;
 }
 
-const Stepper2: React.FC<IProps> = ({ backClick }) => {
+const Stepper2: React.FC<IProps> = ({ backClick, submitClick }) => {
     const [modified, setModified] = useState(false);
     const dispatch = useDispatch();
     const userDetail = useSelector((state: any) => state?.userDetails?.userDetails);
-    const { userName } = userDetail;
+    const { theme } = useTheme();
+    const { userName, nickName } = userDetail;
     const { watch, setValue, getValues } = useFormContext();
 
     const validData = useMemo(() => {
@@ -33,6 +38,7 @@ const Stepper2: React.FC<IProps> = ({ backClick }) => {
                 exceptedGmatScore: getValues("gmatScore"),
             })
         );
+        submitClick();
     };
 
     const toOddMultipleOfFive = (num: number): number => {
@@ -43,12 +49,80 @@ const Stepper2: React.FC<IProps> = ({ backClick }) => {
         return nearestMultipleOfFive;
     };
 
+    const styles = StyleSheet.create({
+        contentContainer: {
+            height: "60%",
+            justifyContent: "space-between",
+            padding: 20,
+        },
+        topArea: {
+            gap: 10,
+        },
+        questionContainer: {
+            marginBottom: 10,
+        },
+        question: {
+            fontWeight: "600",
+            fontSize: 22,
+            color: theme.textColor1,
+        },
+        hint: {
+            marginTop: 10,
+            color: theme.gray300,
+            fontWeight: "400",
+            fontSize: 16,
+        },
+        onboardingDate: {
+            maxWidth: 295,
+        },
+        bottomButtons: {
+            flexDirection: "row",
+            justifyContent: "flex-end",
+        },
+        backButton: {
+            marginRight: 10,
+            backgroundColor: "#ddd",
+            color: theme.textColor1
+        },
+        continueButton: {
+            // backgroundColor: "#007AFF",
+            width: "auto",
+            padding: 20
+        },
+        inputContainer: {
+            alignItems: 'center',
+            height: "100%"
+        },
+        textInput: {
+            fontWeight: '800',
+            fontSize: 22,
+            backgroundColor: '#F5F5F5',
+            color: '#171717',
+            textAlign: 'center',
+            width: 100,
+        },
+        motivation: {
+            color: '#6B7280',
+            overflow: 'hidden',
+            width: 0,
+            height: 'auto',
+            fontSize: 12,
+            // transition: 'all 0.5s',
+        },
+        active: {
+            width: '100%',
+        },
+        errorText: {
+            color: 'red',
+        },
+    });
+
     return (
-        <View style={styles.container}>
+        <View style={styles.contentContainer}>
             <View style={styles.topArea}>
-                <GreetText>{`Hello ${userName}!`}</GreetText>
+                <GreetText>{`Hello ${userName || nickName}!`}</GreetText>
                 <View style={styles.questionContainer}>
-                    <Text style={styles.question}>What is Your target G-Mat score?</Text>
+                    <Text style={styles.question}>When is your G-MAT Exam date?</Text>
                     <Text style={styles.hint}>
                         Here is supposed to state the reason why we need this copy! For efficiency.
                     </Text>
@@ -75,13 +149,13 @@ const Stepper2: React.FC<IProps> = ({ backClick }) => {
                             );
                         }}
                     />
-                    {/* <RatingComponent
+                    <RatingComponent
                         value={Number(watch("gmatScore")) || 0}
                         onChange={(score: number) => {
                             if (!modified) setModified(true);
                             setValue("gmatScore", score);
                         }}
-                    /> */}
+                    />
                     <Text
                         style={[
                             styles.motivation,
@@ -90,80 +164,26 @@ const Stepper2: React.FC<IProps> = ({ backClick }) => {
                         ]}
                     >
                         {!validData
-                            ? "Enter a valid score"
-                            : "Don't You have confidence on you buddy 💪😎"}
+                            ? <Typewriter index={1} currIndex={((watch("gmatScore") < 586 && modified) || !validData) ? 1 : 0} >Enter a valid score</Typewriter>
+                            : <Typewriter index={1} currIndex={((watch("gmatScore") < 586 && modified) || !validData) ? 1 : 0} >Don't You have confidence on you buddy 💪😎</Typewriter>}
                     </Text>
                 </View>
             </View>
             <View style={styles.bottomButtons}>
                 <AppButton
-                    style={styles.button}
+                    style={styles.backButton}
                     onPress={backClick}
-                    label="Back"
                     customVariant="back"
+                    label="Back"
                 />
                 <AppButton
-                    style={styles.button}
+                    style={styles.continueButton}
                     onPress={handleSubmit}
                     label="Continue"
-                    // customVariant="continue"
                 />
             </View>
         </View>
     );
 };
-
-const styles = StyleSheet.create({
-    container: {
-        height: '70%',
-        justifyContent: 'space-between',
-        padding: 20,
-    },
-    topArea: {
-        gap: 10,
-    },
-    questionContainer: {
-        marginBottom: 10,
-    },
-    question: {
-        fontWeight: '600',
-        fontSize: 22,
-    },
-    hint: {
-        color: '#6B7280',
-        fontSize: 16,
-    },
-    inputContainer: {
-        alignItems: 'center',
-    },
-    textInput: {
-        fontWeight: '800',
-        fontSize: 22,
-        backgroundColor: '#F5F5F5',
-        color: '#171717',
-        textAlign: 'center',
-        width: 100,
-    },
-    motivation: {
-        color: '#6B7280',
-        overflow: 'hidden',
-        width: 0,
-        height: 'auto',
-        // transition: 'all 0.5s',
-    },
-    active: {
-        width: '100%',
-    },
-    errorText: {
-        color: 'red',
-    },
-    bottomButtons: {
-        flexDirection: 'row',
-        justifyContent: 'space-between',
-    },
-    button: {
-        backgroundColor: '#3b82f6', // Assuming var(--prime-color)
-    },
-});
 
 export default Stepper2;

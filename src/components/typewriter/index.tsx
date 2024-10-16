@@ -115,7 +115,6 @@ const SequentialTypeWriter = (props?: any) => {
 
 const styles = StyleSheet.create({
     typewriter: {
-        fontFamily: 'monospace',
     },
     cursor: {
         width: 2,

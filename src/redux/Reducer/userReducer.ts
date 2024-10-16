@@ -4,6 +4,7 @@ const initialState = {
     userDetails: {},
     isAuthenticated: false,
     userName: "",
+    nickName: "",
     authToken: "",
     loginSource: "login",
 };
