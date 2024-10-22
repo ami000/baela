@@ -9,7 +9,7 @@
     "userInterfaceStyle": "automatic",
     "splash": {
       "image": "./src/assets/light/pocketLogo.png",
-      "resizeMode": "contain",
+      "resizeMode": "center",
       "backgroundColor": "#ffffff"
     },
     "ios": {

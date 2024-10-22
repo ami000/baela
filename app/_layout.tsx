@@ -12,6 +12,8 @@ import { customFonts } from '@/src/constants/cutsomFonts';
 import { useFonts as useRoboto, Roboto_400Regular } from '@expo-google-fonts/roboto';
 import { useFonts as useOxygen, Oxygen_400Regular } from '@expo-google-fonts/oxygen';
 import { useFonts as useUbuntu, Ubuntu_400Regular } from '@expo-google-fonts/ubuntu';
+import { DroidSans_Regular400 } from '@expo-google-fonts/droid-sans';
+import { Loader } from '@/src/components/loader';
 
 function RootLayoutNav() {
   const isAuthenticated = useSelector((state: RootState) => state.userDetails.isAuthenticated);
@@ -19,6 +21,7 @@ function RootLayoutNav() {
   useRoboto({ Roboto: Roboto_400Regular });
   useOxygen({ Oxygen: Oxygen_400Regular });
   useUbuntu({ Ubuntu: Ubuntu_400Regular });
+  useUbuntu({ "Droid Sans": DroidSans_Regular400 });
 
   React.useEffect(() => {
     store.dispatch(settings({ darkMode: colorScheme === "dark" }));
@@ -42,12 +45,12 @@ export default function RootLayout() {
   const styles = StyleSheet.create({
     safeArea: {
       flex: 1,
-      backgroundColor: isDarkMode ? '#1a1a1a' : '#f0f0f0',
+      backgroundColor: isDarkMode ? '#121212' : '#ffffff',
     },
     container: {
       flex: 1,
-      backgroundColor: isDarkMode ? '#2a2a2a' : '#ffffff',
-      ...customFonts
+      backgroundColor: isDarkMode ? '#121212' : '#ffffff',
+      // ...customFonts
     },
     content: {
       flex: 1,
@@ -61,11 +64,12 @@ export default function RootLayout() {
         <SafeAreaView style={styles.safeArea}>
           <StatusBar
             barStyle={isDarkMode ? "light-content" : "dark-content"}
-            backgroundColor={isDarkMode ? "#1a1a1a" : "#fff"}
+            backgroundColor={isDarkMode ? "#121212" : "#fff"}
           />
           <View style={styles.container}>
             <View style={styles.content}>
               <RootLayoutNav />
+              {/* <Loader open={true} /> */}
             </View>
           </View>
         </SafeAreaView>

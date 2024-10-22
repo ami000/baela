@@ -5,7 +5,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import axios from 'axios';
 import { useForm, FormProvider } from 'react-hook-form';
 import Toast from 'react-native-toast-message';
-import { setAuthToken } from '@/src/redux/Reducer/userReducer';
+import { setAuthToken, updateUserData } from '@/src/redux/Reducer/userReducer';
 import SigninForm from './signinForm';
 import LightStatic1 from "@/src/assets/light/static/static_1.png";
 import LightStatic2 from "@/src/assets/light/static/static_2.png";
@@ -18,6 +18,7 @@ import { useTheme } from '@/src/constants/themeContext';
 import SignupForm from './signupForm';
 import ForgotPassword from './forgotPassword';
 import { router } from 'expo-router';
+import { UserService } from '@/src/services/user.service';
 
 interface LoginFormProps {
     page: 'signIn' | 'signUp' | 'forgotPassword';
@@ -66,6 +67,7 @@ const LoginForm: React.FC<LoginFormProps> = ({ page }) => {
         },
     });
     const navigation = useNavigation();
+    const userService = new UserService()
     const route = useRoute();
     const dispatch = useDispatch();
     const isDarkMode = useSelector((state: any) => state?.settings?.darkMode);
@@ -90,6 +92,7 @@ const LoginForm: React.FC<LoginFormProps> = ({ page }) => {
 
         try {
             const response = await axios(options);
+            console.log(response)
             Toast.show({
                 type: 'success',
                 text1: 'Successfully logged in',
@@ -100,6 +103,7 @@ const LoginForm: React.FC<LoginFormProps> = ({ page }) => {
                     source: fromSignup ? 'signup' : 'login',
                 })
             );
+            await getUserDetails()
             if (fromSignup) {
                 router.replace("/(onboarding)")
             } else {
@@ -187,6 +191,18 @@ const LoginForm: React.FC<LoginFormProps> = ({ page }) => {
                 return null;
         }
     };
+
+
+    const getUserDetails = async () => {
+        try {
+            const data = await userService.GetUser();
+            console.log("data", data.data)
+            if (!!data.data) dispatch(updateUserData(data.data));
+        } catch (error) {
+            console.log("error", error)
+        }
+    };
+
 
     useEffect(() => {
         methods.reset();

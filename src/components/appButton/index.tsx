@@ -1,6 +1,8 @@
 import { useTheme } from '@/src/constants/themeContext';
 import React from 'react';
-import { StyleSheet, View, ActivityIndicator, Text, TouchableOpacity } from 'react-native';
+import { StyleSheet, View, ActivityIndicator, Text, TouchableOpacity, Image } from 'react-native';
+import BackArrow from "@/src/assets/light/Arrow.png"
+import DarkBackArrow from "@/src/assets/dark/Arrow.png"
 
 interface IProps {
     className?: string;
@@ -12,7 +14,7 @@ interface IProps {
 }
 
 const AppButton: React.FC<IProps> = ({ className, label, customVariant, loading, onPress, style }) => {
-    const { theme } = useTheme()
+    const { theme, isDark } = useTheme()
     const styles: any = StyleSheet.create({
         commonButton: {
             backgroundColor: '#FF7F50',
@@ -30,13 +32,11 @@ const AppButton: React.FC<IProps> = ({ className, label, customVariant, loading,
             backgroundColor: '#fff',
             borderColor: 'red',
             borderWidth: 1,
-
         },
         buttonBack: {
             backgroundColor: 'transparent',
             borderColor: 'transparent',
             borderWidth: 0,
-
         },
         buttonAnalyse: {
             backgroundColor: '#4B0082', // Replace with your custom color
@@ -47,10 +47,14 @@ const AppButton: React.FC<IProps> = ({ className, label, customVariant, loading,
             borderColor: '#4B0082', // Replace with your custom color
             borderWidth: 1,
             backgroundColor: 'transparent',
-
         },
+        modLabel: {
+            color: theme.backIcon,
+            fontWeight: 500
+        }
     });
     const buttonStyles = [styles.commonButton, ...(style ? [style] : [])];
+    const buttonLabels = [styles.label];
 
     // Determine the style based on the custom variant
     switch (customVariant) {
@@ -59,6 +63,7 @@ const AppButton: React.FC<IProps> = ({ className, label, customVariant, loading,
             break;
         case "back":
             buttonStyles.push(styles.buttonBack);
+            buttonLabels.push(styles.modLabel)
             break;
         case "analyse":
             buttonStyles.push(styles.buttonAnalyse);
@@ -75,7 +80,9 @@ const AppButton: React.FC<IProps> = ({ className, label, customVariant, loading,
             {loading ? (
                 <ActivityIndicator color="#fff" />
             ) : (
-                <Text style={styles.label}>{label}</Text>
+                <Text style={buttonLabels}>{customVariant === "back" && (
+                    <Image source={isDark ? DarkBackArrow : BackArrow}/>
+                )}{customVariant === "back" ? "  " + label : label}</Text>
             )}
         </TouchableOpacity>
     );

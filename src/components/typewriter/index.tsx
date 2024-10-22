@@ -83,7 +83,7 @@ const Typewriter: React.FC<TypewriterProps> = memo(({
             {!isTypingComplete && (
                 <Animated.View
                     style={[
-                        styles.cursor,
+                        // styles.cursor,
                         {
                             opacity: blinkAnim,
                         },

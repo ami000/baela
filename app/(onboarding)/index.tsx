@@ -1,8 +1,6 @@
 import React, { useState } from 'react';
 import { View, StyleSheet, Image, useColorScheme, ImageBackground } from 'react-native';
 import { useForm, FormProvider } from 'react-hook-form';
-import { useNavigation } from '@react-navigation/native';
-import { StackNavigationProp } from '@react-navigation/stack';
 import { useDispatch } from 'react-redux';
 import { setFreedata } from '@/src/redux/Reducer/userReducer';
 import Welcome from '@/src/components/onboarding/welcome';
@@ -14,16 +12,9 @@ import BrandLogo from "@/src/assets/light/logo/logo.png";
 import DarkBrandLogo from "@/src/assets/dark/logo/logo.png";
 import DarkBG from "@/src/assets/dark/OnboardingBG.png";
 import LightBG from "@/src/assets/light/OnboardingBG.png";
-
-
-type RootStackParamList = {
-    Analyser: undefined;
-};
-
-type OnBoardingPageProps = StackNavigationProp<RootStackParamList, 'Analyser'>;
+import { router } from 'expo-router';
 
 const OnBoardingPage: React.FC = () => {
-    const navigation = useNavigation<OnBoardingPageProps>();
     const colorScheme = useColorScheme();
     const { theme } = useTheme();
     const dispatch = useDispatch();
@@ -38,7 +29,7 @@ const OnBoardingPage: React.FC = () => {
             setStep((prev) => prev + 1);
         } else {
             dispatch(setFreedata({ loginSource: 'login' }));
-            navigation.navigate('Analyser');
+            router.replace("/(app)/dashboard")
         }
     };
 

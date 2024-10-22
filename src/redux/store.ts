@@ -1,17 +1,17 @@
 import { configureStore } from '@reduxjs/toolkit';
 import { persistStore, persistReducer } from 'redux-persist';
-import storage from 'redux-persist/lib/storage'; // Defaults to localStorage for web
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import { RootReducer } from './Reducer'; // Your root reducer
 
-// const persistConfig = {
-//     key: 'pocketBud',
-//     storage,
-// };
+const persistConfig = {
+    key: 'pocketBud',
+    storage: AsyncStorage,
+};
 
-// const persistedReducer = persistReducer(persistConfig, RootReducer);
+const persistedReducer = persistReducer(persistConfig, RootReducer);
 
 export const store = configureStore({
-    reducer: RootReducer,
+    reducer: persistedReducer,
     middleware: (getDefaultMiddleware) =>
         getDefaultMiddleware({
             serializableCheck: false, // This is required to ignore non-serializable actions like those from redux-persist

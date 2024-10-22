@@ -17,8 +17,7 @@ const GreetText: React.FC<IProps> = ({ text, children }) => {
 
     const styles = StyleSheet.create({
         greetingText: {
-            fontFamily: fontsLoaded ? 'RobotoMono-Regular' : `"Roboto", "Oxygen", 
-                       "Ubuntu", sans-serif`,
+            fontFamily: fontsLoaded ? 'RobotoMono-Regular': "",
             fontSize: 16,
             fontWeight: "500",
             color: theme.textColor1,

@@ -4,10 +4,10 @@ import { Text, View, TouchableOpacity, StyleSheet } from "react-native";
 interface IProps {
     name: string;
     onClick?: () => void;
-    className?: string;
+    style?: any
 }
 
-const AppAvatar: React.FC<IProps> = ({ name, onClick, className }) => {
+const AppAvatar: React.FC<IProps> = ({ name, onClick, style }) => {
     if (!name) name = "";
 
     const stringToColor = (string: string) => {
@@ -37,7 +37,7 @@ const AppAvatar: React.FC<IProps> = ({ name, onClick, className }) => {
     const { color, initials } = stringAvatar(name);
 
     return (
-        <TouchableOpacity onPress={onClick} style={[styles.avatar, { backgroundColor: color }]}>
+        <TouchableOpacity onPress={onClick} style={[styles.avatar, style ? style : {}, { backgroundColor: color }]}>
             <Text style={styles.text}>{initials}</Text>
         </TouchableOpacity>
     );

@@ -44,7 +44,11 @@ interface ThemeColors {
   menuItemColor: string;
   questionBg: string;
   scrollbar: string;
+  countDownBar: string;
   commonBorder: string;
+  graphLabel: string;
+  graphLines: string;
+  backIcon: string;
 }
 
 const lightTheme: ThemeColors = {
@@ -89,7 +93,11 @@ const lightTheme: ThemeColors = {
   menuItemColor: '#A3A3A3',
   questionBg: '#F9FAFB',
   scrollbar: '#D9D9D9',
+  countDownBar: "#F5F5F5",
   commonBorder: "#D0D5DD",
+  graphLabel: "#1F2937",
+  graphLines: "#F1F1F1",
+  backIcon: '#6B7280',
 };
 
 const darkTheme: ThemeColors = {
@@ -134,7 +142,11 @@ const darkTheme: ThemeColors = {
   menuItemColor: '#A3A3A3',
   questionBg: '#383838',
   scrollbar: '#383838',
-  commonBorder: "#D0D5DD"
+  countDownBar: '#383838',
+  commonBorder: "#D0D5DD",
+  graphLabel: "#A3A3A3",
+  graphLines: "#383838",
+  backIcon: '#F9FAFB',
 };
 
 interface ThemeContextType {

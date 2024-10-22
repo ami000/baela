@@ -62,7 +62,6 @@ const Stepper1: React.FC<IProps> = ({ backClick, submitClick }) => {
         },
         backButton: {
             marginRight: 10,
-            backgroundColor: "#ddd",
         },
         continueButton: {
             // backgroundColor: "#007AFF",

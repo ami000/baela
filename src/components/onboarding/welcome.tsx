@@ -31,15 +31,15 @@ const Welcome: React.FC<IProps> = ({ onNext }) => {
         dispatch(updateUserData({ nickName: nameValue }));
     };
 
-    useEffect(() => {
-        if (inputRef.current) {
-            inputRef.current.focus();
-        }
-    }, []);
-
     const [index, setIndex] = useState(0);
 
     const Typewriter = SequentialTypeWriter({ index, setIndex });
+
+    useEffect(() => {
+        if (inputRef.current && index > 5) {
+            inputRef.current.focus();
+        }
+    }, [index]);
 
 
     const styles = StyleSheet.create({
@@ -99,7 +99,7 @@ const Welcome: React.FC<IProps> = ({ onNext }) => {
         <View style={styles.welcomeContainer}>
             <View style={styles.questionContainer}>
                 <Typewriter index={0} style={styles.question}>
-                    Hello I'm PiBi
+                    Hello I'm Pibi
                 </Typewriter>
                 <Typewriter index={1} style={styles.hint}>
                     I'm a next generation AI assistant, here to help you ace your competitive exams.
