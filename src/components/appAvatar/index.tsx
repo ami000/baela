@@ -5,9 +5,10 @@ interface IProps {
     name: string;
     onClick?: () => void;
     style?: any
+    textStyle?: any
 }
 
-const AppAvatar: React.FC<IProps> = ({ name, onClick, style }) => {
+const AppAvatar: React.FC<IProps> = ({ name, onClick, style, textStyle }) => {
     if (!name) name = "";
 
     const stringToColor = (string: string) => {
@@ -34,11 +35,11 @@ const AppAvatar: React.FC<IProps> = ({ name, onClick, style }) => {
         };
     };
 
-    const { color, initials } = stringAvatar(name);
+    const { initials } = stringAvatar(name);
 
     return (
-        <TouchableOpacity onPress={onClick} style={[styles.avatar, style ? style : {}, { backgroundColor: color }]}>
-            <Text style={styles.text}>{initials}</Text>
+        <TouchableOpacity onPress={onClick} style={[styles.avatar, style ? style : {}, { backgroundColor: "#FFF0E6" }]}>
+            <Text style={[styles.text, ...(textStyle ? [textStyle] : [])]}>{initials}</Text>
         </TouchableOpacity>
     );
 };
@@ -52,7 +53,7 @@ const styles = StyleSheet.create({
         alignItems: "center",
     },
     text: {
-        color: "#fff",
+        color: "#FF6B00",
         fontSize: 20,
         fontWeight: "bold",
     },

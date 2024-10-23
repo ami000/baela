@@ -12,7 +12,7 @@ export default function Dashboard() {
 
   const styles = StyleSheet.create({
     dashboardContainer: {
-        backgroundColor: theme.backgroundColor,
+        backgroundColor: theme.backgroundColor3,
         flex: 1,
       },
       scrollViewContent: {

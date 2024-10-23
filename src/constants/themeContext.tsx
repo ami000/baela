@@ -49,6 +49,7 @@ interface ThemeColors {
   graphLabel: string;
   graphLines: string;
   backIcon: string;
+  mailText: string;
 }
 
 const lightTheme: ThemeColors = {
@@ -98,6 +99,7 @@ const lightTheme: ThemeColors = {
   graphLabel: "#1F2937",
   graphLines: "#F1F1F1",
   backIcon: '#6B7280',
+  mailText: "#6B7280"
 };
 
 const darkTheme: ThemeColors = {
@@ -147,6 +149,7 @@ const darkTheme: ThemeColors = {
   graphLabel: "#A3A3A3",
   graphLines: "#383838",
   backIcon: '#F9FAFB',
+  mailText: "#A3A3A3"
 };
 
 interface ThemeContextType {

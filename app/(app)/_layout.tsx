@@ -2,7 +2,7 @@ import { Drawer } from 'expo-router/drawer';
 import React, { useEffect } from 'react';
 import { TouchableOpacity, StyleSheet, View, Text, Image, useColorScheme } from 'react-native';
 import { Feather } from '@expo/vector-icons';
-import { useNavigation, DrawerActions } from '@react-navigation/native';
+import { useNavigation, DrawerActions, useRoute } from '@react-navigation/native';
 import { DrawerContentScrollView, DrawerItemList } from '@react-navigation/drawer';
 import { useTheme } from '@/src/constants/themeContext';
 import DashboardIcon from "@/src/assets/light/menuIcons/Dashboard.png"
@@ -13,6 +13,7 @@ import DarkBrandLogo from "@/src/assets/dark/logo/logo.png";
 import BrandLogo from "@/src/assets/light/logo/logo.png";
 import AppAvatar from '@/src/components/appAvatar';
 import { useSelector } from 'react-redux';
+import { Link, router, Stack, usePathname } from 'expo-router';
 
 type DrawerToggleButtonProps = {
   tintColor?: string;
@@ -27,7 +28,7 @@ const DrawerToggleButton: React.FC<DrawerToggleButtonProps> = ({ tintColor }) =>
   };
 
   return (
-    <TouchableOpacity onPress={openDrawer} style={[styles.mainContainer, { backgroundColor: theme.backgroundColor }]}>
+    <TouchableOpacity onPress={openDrawer} style={[styles.mainContainer, { backgroundColor: theme.backgroundColor3 }]}>
       <Feather name="menu" size={24} color={tintColor} />
     </TouchableOpacity>
   );
@@ -38,14 +39,17 @@ const DrawerRightContent: React.FC<{}> = () => {
   const userDetails = useSelector(
     (state: any) => state?.userDetails?.userDetails
   );
+
+  const handleProfileClick = () => {
+    router.push("/(app)/profile")
+  }
+
   return (
-    <View style={[styles.rightContainer, { backgroundColor: theme.backgroundColor }]}>
+    <View style={[styles.rightContainer, { backgroundColor: theme.backgroundColor3 }]}>
       <TouchableOpacity >
         <Feather name="bell" size={24} color={theme.textColor1} style={styles.bellIcon} />
       </TouchableOpacity>
-      <TouchableOpacity>
-        <AppAvatar name={userDetails.nickName} style={{height: 35, width: 35}} />
-      </TouchableOpacity>
+      <AppAvatar name={userDetails.nickName} style={{ height: 35, width: 35 }} onClick={handleProfileClick} />
     </View>
   );
 };
@@ -70,6 +74,8 @@ function CustomDrawerContent(props: any) {
 
 export default function RootLayout() {
   const { theme } = useTheme();
+  const pathname = usePathname();
+  const isNoDrawerRoute = pathname.startsWith('/no-drawer');
 
   const styles2 = StyleSheet.create({
     drawerButtonItem: {
@@ -84,6 +90,24 @@ export default function RootLayout() {
       padding: 5,
     },
   });
+
+  if (isNoDrawerRoute) {
+    return (
+      <Stack
+        screenOptions={{
+          statusBarHidden: true,
+          headerShown: false,
+        }}
+      >
+        <Stack.Screen
+          name="(no-drawer)"
+          options={{
+            headerShown: false,
+          }}
+        />
+      </Stack >
+    );
+  }
 
   return (
     <Drawer
@@ -142,6 +166,25 @@ export default function RootLayout() {
           drawerIcon: (props) => {
             return props.focused ? <Image source={StudyPlanActiveIcon} style={styles.icon} /> : <Image source={StudyPlanIcon} style={styles.icon} />
           },
+        }}
+      />
+      <Drawer.Screen
+        name="profile"
+        options={{
+          drawerItemStyle: {
+            display: "none"
+          },
+          title: 'Profile',
+        }}
+      />
+      <Drawer.Screen
+        name="(no-drawer)"
+        options={{
+          drawerItemStyle: {
+            display: "none"
+          },
+          headerShown: false,
+          headerStatusBarHeight: 0
         }}
       />
     </Drawer>

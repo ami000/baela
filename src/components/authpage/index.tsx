@@ -92,7 +92,6 @@ const LoginForm: React.FC<LoginFormProps> = ({ page }) => {
 
         try {
             const response = await axios(options);
-            console.log(response)
             Toast.show({
                 type: 'success',
                 text1: 'Successfully logged in',
@@ -196,7 +195,6 @@ const LoginForm: React.FC<LoginFormProps> = ({ page }) => {
     const getUserDetails = async () => {
         try {
             const data = await userService.GetUser();
-            console.log("data", data.data)
             if (!!data.data) dispatch(updateUserData(data.data));
         } catch (error) {
             console.log("error", error)
