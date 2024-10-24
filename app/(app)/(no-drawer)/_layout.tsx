@@ -1,17 +1,14 @@
-// app/(app)/(no-drawer)/_layout.tsx
 import { Stack } from 'expo-router';
 import { TouchableOpacity, View, Text, StyleSheet } from 'react-native';
 import { useRouter } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import { NativeStackHeaderProps } from '@react-navigation/native-stack';
 import { useTheme } from '@/src/constants/themeContext';
 
 export default function NoDrawerLayout() {
   const router = useRouter();
   const insets = useSafeAreaInsets();
   const { theme } = useTheme();
-
 
   const styles = StyleSheet.create({
     headerContainer: {
@@ -62,7 +59,7 @@ export default function NoDrawerLayout() {
             ]}>
               {navigation.canGoBack() && (
                 <TouchableOpacity
-                  onPress={() => router.back()}
+                  onPress={() => router.navigate("/(app)/profile")}
                   style={styles.backButton}
                 >
                   <Ionicons name="chevron-back" size={24} color={theme.textColor1} />

@@ -44,50 +44,51 @@ export const sendErrorDataToBackend = async (errorData: any, ErrorLogApis: any) 
 
 export const storeDataInLocalSQL = async (data: any[]) => {
     const chunks = chunk(data, 500);
-    let i = 0
+    let i = 0;
+
     for (const chuk of chunks) {
-        const query = insertIntoErrorLogTable();
-        const insertStmt = LocalDB?.prepare(query);
-        // eslint-disable-next-line no-loop-func
-        chuk?.forEach((row) => {
-            const value = [
-                row?.id || i,
-                row?.error_template_id,
-                row?.section || "",
-                row?.category || "",
-                row?.subcategories || "",
-                row?.question_type || "",
-                row?.topic_names || "",
-                row?.subtopic_names || "",
-                row?.brief_question_text || "",
-                row?.link_to_question || "",
-                row?.bookmarked || false,
-                row?.solution || "",
-                row?.guessed || false,
-                row?.selected_option || "",
-                row?.date_attempted || "",
-                row?.time_taken || "",
-                row?.performance || false,
-                row?.difficulty || 0,
-                row?.question_source || "",
-                row?.careless_mistake || false,
-                row?.anxiety || 0,
-                row?.conceptual_gap || false,
-                row?.time_mismanagement || false,
-                row?.vocabulary_void || false,
-                row?.comprehension_error || false,
-                row?.description || "",
-                row?.learnings || "",
-                row?.notes || "",
-                row?.question_id || "",
-                row?.user_id || "",
-            ];
-            insertStmt?.run(value);
-            i += 1;
+        LocalDB.transaction((tx) => {
+            const query = insertIntoErrorLogTable();
+            chuk.forEach((row) => {
+                const value = [
+                    row?.id || i,
+                    row?.error_template_id,
+                    row?.section || "",
+                    row?.category || "",
+                    row?.subcategories || "",
+                    row?.question_type || "",
+                    row?.topic_names || "",
+                    row?.subtopic_names || "",
+                    row?.brief_question_text || "",
+                    row?.link_to_question || "",
+                    row?.bookmarked || false,
+                    row?.solution || "",
+                    row?.guessed || false,
+                    row?.selected_option || "",
+                    row?.date_attempted || "",
+                    row?.time_taken || "",
+                    row?.performance || false,
+                    row?.difficulty || 0,
+                    row?.question_source || "",
+                    row?.careless_mistake || false,
+                    row?.anxiety || 0,
+                    row?.conceptual_gap || false,
+                    row?.time_mismanagement || false,
+                    row?.vocabulary_void || false,
+                    row?.comprehension_error || false,
+                    row?.description || "",
+                    row?.learnings || "",
+                    row?.notes || "",
+                    row?.question_id || "",
+                    row?.user_id || "",
+                ];
+                tx.executeSql(query, value);
+                i += 1;
+            });
         });
-        insertStmt?.free();
     }
 };
+
 
 export const getErrorLogDataFromBackend = async (getIdTokenClaims: any, dispatch: any, chartData: any, chartDatas: any, isAuthenticated: any, ErrorLogApis: any) => {
     try {

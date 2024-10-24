@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
     View,
     Text,
@@ -8,26 +8,31 @@ import {
     StatusBar,
     SafeAreaView,
 } from 'react-native';
-import { Ionicons } from '@expo/vector-icons';
 import { useTheme } from '@/src/constants/themeContext';
 import AppButton from '@/src/components/appButton';
 import ToggleSwitch from '@/src/components/toggleSwitch';
+import { Platform } from 'react-native';
+import * as Device from 'expo-device';
+import * as Notifications from 'expo-notifications';
+import { subscribe } from '@/src/utils/helper';
+import { router } from 'expo-router';
 
-interface NotificationSettingsProps {
-    onBack?: () => void;
-    onSave?: (settings: { studyTimeAlert: boolean }) => void;
-}
+// Configure how notifications should appear when the app is in the foreground
+Notifications.setNotificationHandler({
+    handleNotification: async () => ({
+        shouldShowAlert: true,
+        shouldPlaySound: true,
+        shouldSetBadge: true,
+    }),
+});
 
-const NotificationSettings: React.FC<NotificationSettingsProps> = ({
-    onBack,
-    onSave,
-}) => {
-    const [studyTimeAlert, setStudyTimeAlert] = useState(false);
+interface NotificationSettingsProps { }
+
+const NotificationSettings: React.FC<NotificationSettingsProps> = () => {
+    const [isSubscribed, setIsSubscribed] = useState(false);
+    const [loading, setLoading] = useState(false);
+    const [expoPushToken, setExpoPushToken] = useState<string | undefined>();
     const { theme } = useTheme();
-
-    const handleSave = () => {
-        onSave?.({ studyTimeAlert });
-    };
 
     const styles = StyleSheet.create({
         container: {
@@ -76,6 +81,109 @@ const NotificationSettings: React.FC<NotificationSettingsProps> = ({
         }
     });
 
+
+    async function registerForPushNotifications() {
+        let token;
+
+        if (Platform.OS === 'android') {
+            await Notifications.setNotificationChannelAsync('default', {
+                name: 'default',
+                importance: Notifications.AndroidImportance.MAX,
+                vibrationPattern: [0, 250, 250, 250],
+                lightColor: '#FF231F7C',
+            });
+        }
+
+        if (Device.isDevice) {
+            const { status: existingStatus } = await Notifications.getPermissionsAsync();
+            let finalStatus = existingStatus;
+
+            if (existingStatus !== 'granted') {
+                const { status } = await Notifications.requestPermissionsAsync();
+                finalStatus = status;
+            }
+
+            if (finalStatus !== 'granted') {
+                alert('Failed to get push token for push notification!');
+                return;
+            }
+
+            token = (await Notifications.getExpoPushTokenAsync({
+                projectId: 'your-project-id', // Get this from your Expo project
+            })).data;
+        } else {
+            setIsSubscribed(false)
+            alert('Must use physical device for Push Notifications');
+        }
+
+        return token;
+    }
+
+    useEffect(() => {
+        // Check if already subscribed
+        checkSubscriptionStatus();
+    }, []);
+
+    const checkSubscriptionStatus = async () => {
+        try {
+            const token = await Notifications.getExpoPushTokenAsync({
+                projectId: 'your-project-id',
+            });
+            if (token) {
+                setExpoPushToken(token.data);
+                setIsSubscribed(true);
+            }
+        } catch (error) {
+            console.error('Error checking subscription status:', error);
+        }
+    };
+
+    const subscribeUser = async (): Promise<void> => {
+        setLoading(true);
+        try {
+            const token = await registerForPushNotifications();
+            if (token) {
+                setExpoPushToken(token);
+                setIsSubscribed(true);
+
+                // Send the token to your server
+                await subscribe({
+                    endpoint: token,
+                    // Add any additional data your server needs
+                });
+            }
+        } catch (error) {
+            console.error('Error subscribing to notifications:', error);
+            alert('Failed to subscribe to notifications');
+            setIsSubscribed(false)
+        }
+        setLoading(false);
+    };
+
+    const unsubscribeUser = async (): Promise<void> => {
+        try {
+            if (expoPushToken) {
+                // Remove token from server
+                await removeSubscriptionFromServer(expoPushToken);
+
+                // Remove permissions locally
+                await Notifications.unregisterForNotificationsAsync();
+
+                setIsSubscribed(false);
+                setExpoPushToken(undefined);
+            }
+        } catch (error) {
+            console.error('Error unsubscribing from notifications:', error);
+            alert('Failed to unsubscribe from notifications');
+            setIsSubscribed(true);
+        }
+    };
+
+    const removeSubscriptionFromServer = async (token: string): Promise<void> => {
+        // Implement the logic to remove the token from your server
+    };
+
+
     return (
         <SafeAreaView style={styles.container}>
             <StatusBar barStyle="light-content" />
@@ -94,11 +202,15 @@ const NotificationSettings: React.FC<NotificationSettingsProps> = ({
                             Here is supposed to state the reason why we need this copy!
                         </Text>
                     </View>
-                    <ToggleSwitch onToggle={setStudyTimeAlert} value={studyTimeAlert} />
+                    <ToggleSwitch onToggle={(val: boolean) => {
+                        setIsSubscribed(val);
+                        if (val) subscribeUser();
+                        else unsubscribeUser();
+                    }} value={isSubscribed} loading={loading} />
                 </View>
             </View>
 
-            <AppButton label='Save Changes' onPress={handleSave} />
+            <AppButton label='Save Changes' onPress={() => router.push("/(app)/profile")} />
         </SafeAreaView>
     );
 };
