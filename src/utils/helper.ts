@@ -24,9 +24,9 @@ export const subscribe = async (sub: any) => {
 }
 
 export const sendErrorDataToBackend = async (errorData: any, ErrorLogApis: any) => {
+    const jobId = uuidv4()
     try {
         const chuk = chunk(errorData, 200);
-        const jobId = uuidv4()
         await Promise.all(
             chuk.map(async (x) => {
                 await ErrorLogApis.SaveErrorLog(
@@ -40,6 +40,7 @@ export const sendErrorDataToBackend = async (errorData: any, ErrorLogApis: any) 
     } catch (error: any) {
         console.log("error", error.message);
     }
+    return jobId
 };
 
 export const storeDataInLocalSQL = async (data: any[]) => {

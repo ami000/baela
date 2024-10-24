@@ -11,9 +11,10 @@ interface IProps {
     loading?: boolean;
     onPress: () => void; // onPress prop for the button action
     style?: any;
+    disabled?: boolean;
 }
 
-const AppButton: React.FC<IProps> = ({ className, label, customVariant, loading, onPress, style }) => {
+const AppButton: React.FC<IProps> = ({ className, label, customVariant, loading, onPress, style, disabled }) => {
     const { theme, isDark } = useTheme()
     const styles: any = StyleSheet.create({
         commonButton: {
@@ -39,9 +40,9 @@ const AppButton: React.FC<IProps> = ({ className, label, customVariant, loading,
             borderWidth: 0,
         },
         buttonAnalyse: {
-            backgroundColor: '#4B0082', // Replace with your custom color
+            backgroundColor: theme.textColor1,
+            color: theme.backgroundColor,
             marginTop: 30,
-
         },
         buttonCustomOutlined: {
             borderColor: '#4B0082', // Replace with your custom color
@@ -76,7 +77,7 @@ const AppButton: React.FC<IProps> = ({ className, label, customVariant, loading,
     }
 
     return (
-        <TouchableOpacity style={buttonStyles} onPress={onPress} disabled={loading}>
+        <TouchableOpacity style={buttonStyles} onPress={onPress} disabled={loading || disabled}>
             {loading ? (
                 <ActivityIndicator color="#fff" />
             ) : (

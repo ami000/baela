@@ -9,6 +9,33 @@ export const chunk = (arr: any[], size: number) =>
         arr.slice(i * size, i * size + size)
     );
 
+
+function convertToUTC(dateString: string) {
+    const [day, month, year, time, meridiem]: string[] = dateString.split(/[\s,]+/);
+
+    // Convert the month abbreviation to a number
+    const months: Record<string, number> = {
+        Jan: 0, Feb: 1, Mar: 2, Apr: 3, May: 4, Jun: 5,
+        Jul: 6, Aug: 7, Sep: 8, Oct: 9, Nov: 10, Dec: 11
+    };
+
+    const [hours, minutes] = time.split(':').map(Number);
+    let adjustedHours = hours;
+
+    if (meridiem === 'pm' && hours !== 12) adjustedHours += 12;
+    if (meridiem === 'am' && hours === 12) adjustedHours = 0;
+
+    const localDate = new Date(
+        parseInt(year),
+        months[month],
+        parseInt(day),
+        adjustedHours,
+        minutes
+    );
+
+    return localDate.toISOString();
+}
+
 export const errorMapper = (jsonData: any, templateId: TemplateId) => {
     let mappedJson: any = {}
     switch (templateId) {
@@ -60,7 +87,7 @@ export const errorMapper = (jsonData: any, templateId: TemplateId) => {
                 let mappedRow: any = {};
                 Object.keys(GMATClubTemplate).forEach((field: string) => {
                     if (["date_attempted"].includes(field)) {
-                        mappedRow[field] = new Date(row[GMATClubTemplate[field]]).toISOString()
+                        mappedRow[field] = convertToUTC(row[GMATClubTemplate[field]])
                     } else {
                         mappedRow[field] = row[GMATClubTemplate[field]]
                     }

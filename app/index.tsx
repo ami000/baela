@@ -12,9 +12,9 @@ export default function Index() {
     store.dispatch(settings({ darkMode: colorScheme === "dark" }));
   }, [colorScheme]);
 
-  // if (isAuthenticated && loginSource === "signin") return <Redirect href="/(app)/dashboard" />;
-  // if (isAuthenticated && loginSource === "signup") return <Redirect href="/(onboarding)" />;
-  // return <Redirect href="/(auth)/signin" />;
+  if (isAuthenticated && loginSource === "signin") return <Redirect href="/(app)/dashboard" />;
+  if (isAuthenticated && loginSource === "signup") return <Redirect href="/(onboarding)" />;
+  return <Redirect href="/(auth)/signin" />;
 
-  return <Redirect href="/(app)/study-plan" />;
+  // return <Redirect href="/(app)/study-plan" />;
 }
